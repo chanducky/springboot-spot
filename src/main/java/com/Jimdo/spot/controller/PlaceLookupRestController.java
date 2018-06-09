@@ -25,14 +25,24 @@ public class PlaceLookupRestController {
 
 	PlcaeLookupService plcaeLookupService;
 
+	/**
+	 * @param plcaeLookupService
+	 */
 	public PlaceLookupRestController(PlcaeLookupService plcaeLookupService) {
 		this.plcaeLookupService = plcaeLookupService;
 	}
 
+	/**
+	 * @param requestParams
+	 * @return ResponseEntity<Object> returns places based on query from different place search api provider  
+	 */
 	@RequestMapping(value="/search", method = RequestMethod.GET)
-	public ResponseEntity<Object> serachPlace(@RequestParam HashMap<String,String> allRequestParams) {
-
-		List<ConcurrentHashMap<String, Object>> results =  plcaeLookupService.searchPlace(allRequestParams);
+	public ResponseEntity<Object> serachPlace(@RequestParam HashMap<String,String> requestParams) {
+		
+		// search places based on query and parameter
+		List<ConcurrentHashMap<String, Object>> results =  plcaeLookupService.searchPlace(requestParams);
+		
+		// set search result 
 		ResponseData responseData =  new ResponseData(HttpStatus.OK, results);
 		
 		return new ResponseEntity<Object>(responseData,HttpStatus.OK);
