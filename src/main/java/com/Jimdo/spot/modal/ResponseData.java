@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 
 
 /**
+ * Universal response packet for api
+ * 
  * @author chandrakumar
  *
  */

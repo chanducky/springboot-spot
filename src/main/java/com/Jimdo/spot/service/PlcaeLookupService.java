@@ -11,8 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface PlcaeLookupService {
 
 	/**
+	 * Search place based on query from given place search api provider.
+	 * 
 	 * @param reqParams
-	 * @return
+	 * @return List<ConcurrentHashMap<String, Object>>
 	 */
 	List<ConcurrentHashMap<String, Object>> searchPlace(HashMap<String, String> reqParams);
 	

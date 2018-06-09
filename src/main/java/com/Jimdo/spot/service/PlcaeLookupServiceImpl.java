@@ -19,22 +19,38 @@ import com.Jimdo.spot.processer.GooglePlaceApiProcessor;
 import com.Jimdo.spot.util.AppUtility;
 
 
+/**
+ * service to search place from different place api.
+ * 
+ * @author chandrakumar
+ *
+ */
 @Service
 public class PlcaeLookupServiceImpl implements PlcaeLookupService{
 	
+	/**
+	 * Property file bean
+	 */
 	@Autowired
 	AppPropperties appPropperties;
 	
+	/* (non-Javadoc)
+	 * @see com.Jimdo.spot.service.PlcaeLookupService#searchPlace(java.util.HashMap)
+	 */
 	@Override
 	public List<ConcurrentHashMap<String, Object>> searchPlace(HashMap<String,String> reqParams){
 		
 		List<ConcurrentHashMap<String, Object>> finalResult =new LinkedList<>();
 		
+		// create thread pool based no of core of processor used by machine. 
 		ExecutorService executor = Executors.newWorkStealingPool();
+		
 		List<Future<ConcurrentHashMap<String, Object>>> futureList = new LinkedList<>();
 		
+		// iteration over used place api provider
 		for(String  providerName: appPropperties.getPlaceApiProviders()) {
 			
+			//build parameter base on provider name
 			ConcurrentHashMap<String, String> result = AppUtility.validateAndBuildParameterForPlcaeApi(providerName, reqParams);
 			
 			if("true".equalsIgnoreCase(result.get("status"))) {
@@ -42,17 +58,16 @@ public class PlcaeLookupServiceImpl implements PlcaeLookupService{
 					result.put("key", appPropperties.getGoogleApiKey());
 					
 					GooglePlaceApiProcessor googlePlaceSearchingTask = new GooglePlaceApiProcessor(result);
+					
 					Future<ConcurrentHashMap<String, Object>> fo = executor.submit(googlePlaceSearchingTask);
 					futureList.add(fo);
 				}
-				
-				// call other api provider like Yelp etc in else if condition
-				
 			}else {
 				throw new BadRequestException(result.get("message"));
 			}
 		}
 		
+		// Collect all the search result
 		for(Future<ConcurrentHashMap<String, Object>>  fo : futureList) {
 			try {
 				finalResult.add(fo.get());

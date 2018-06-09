@@ -3,6 +3,8 @@ package com.Jimdo.spot.modal;
 import java.util.HashMap;
 
 /**
+ * fields, results of place search 
+ * 
  * @author chandrakumar
  *
  */
