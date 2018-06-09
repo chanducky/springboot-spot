@@ -15,6 +15,10 @@ import com.Jimdo.spot.modal.ResponseData;
 import com.Jimdo.spot.service.PlcaeLookupService;
 
 
+/**
+ * @author chandrakumar
+ *
+ */
 @RestController
 @RequestMapping("api/place")
 public class PlaceLookupRestController {
