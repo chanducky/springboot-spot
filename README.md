@@ -7,7 +7,7 @@ Import project in eclipse and go to JimdoSpotApiApplication.java  and run as Jav
 OR open terminal and go to pom.xml directory type mvn spring-boot:run and hit Enter. 
 
 End Point :
-http://{domain_name}/api/place/search?parameters
+1 http://{domain_name}/api/place/search?parameters
 
 
 parameters
@@ -23,3 +23,6 @@ minprice and maxprice,
 opennow,
 pagetoken,
 type
+
+2: http://{domain_name}/api/place/details/{placeid} is uri return from place search api which return details about that place by placeid
+ 
