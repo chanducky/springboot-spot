@@ -12,15 +12,14 @@ http://{domain_name}/api/place/search?parameters
 
 parameters
 
-1: required parameter
-query
+1: required parameter- query
 
-2 : optional parameters
-region
-location
-radius
-language
-minprice and maxprice
-opennow
-pagetoken
+2 : optional parameters-
+region,
+location,
+radius,
+language,
+minprice and maxprice,
+opennow,
+pagetoken,
 type
