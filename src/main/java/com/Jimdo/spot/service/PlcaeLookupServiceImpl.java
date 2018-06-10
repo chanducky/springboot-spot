@@ -10,7 +10,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.Jimdo.spot.constants.AppConstants;
 import com.Jimdo.spot.constants.AppPropperties;
@@ -40,6 +43,7 @@ public class PlcaeLookupServiceImpl implements PlcaeLookupService{
 	@Override
 	public List<ConcurrentHashMap<String, Object>> searchPlace(HashMap<String,String> reqParams){
 		
+		
 		List<ConcurrentHashMap<String, Object>> finalResult =new LinkedList<>();
 		
 		// create thread pool based no of core of processor used by machine. 
@@ -56,6 +60,7 @@ public class PlcaeLookupServiceImpl implements PlcaeLookupService{
 			if("true".equalsIgnoreCase(result.get("status"))) {
 				if(AppConstants.PLACE_API_PROVIDER_GOOGLE.equalsIgnoreCase(providerName)) {
 					result.put("key", appPropperties.getGoogleApiKey());
+					result.put("context_path", ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
 					
 					GooglePlaceApiProcessor googlePlaceSearchingTask = new GooglePlaceApiProcessor(result);
 					
@@ -83,6 +88,25 @@ public class PlcaeLookupServiceImpl implements PlcaeLookupService{
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.Jimdo.spot.service.PlcaeLookupService#getPlaceDtls(java.lang.String)
+	 */
+	@Override
+	public ResponseEntity<String>  getPlaceDtls(String placeid){
+		
+		StringBuffer uriBuilder = new StringBuffer(AppConstants.GOOGLE_PLACE_DETAILS_API_URI);
+		
+		uriBuilder.append("&key="+appPropperties.getGoogleApiKey());
+		uriBuilder.append("&placeid="+placeid);
+
+		/*
+		 *Call google place details api 
+		 */
+		RestTemplate rt = new RestTemplate();
+		final ResponseEntity<String> responseEntity = rt.getForEntity(uriBuilder.toString(), String.class);
+		
+		return responseEntity;
+	}
 	
 	
 }

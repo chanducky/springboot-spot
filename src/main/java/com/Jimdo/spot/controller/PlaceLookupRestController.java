@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,9 +45,20 @@ public class PlaceLookupRestController {
 		
 		// set search result 
 		ResponseData responseData =  new ResponseData(HttpStatus.OK, results);
-		
 		return new ResponseEntity<Object>(responseData,HttpStatus.OK);
 
 	}
 
+	/**
+	 * @param placeid
+	 * @return ResponseEntity<String>
+	 */
+	@RequestMapping(value="/details/{placeid}", method = RequestMethod.GET)
+	public ResponseEntity<String> getPlaceDetails(@PathVariable String placeid) {
+		
+		// search places based on query and parameter
+		ResponseEntity<String> responseEntity =  plcaeLookupService.getPlaceDtls(placeid);
+		
+		return responseEntity;
+	}
 }

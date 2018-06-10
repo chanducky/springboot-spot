@@ -14,8 +14,8 @@ public interface AppConstants {
 	//String GOOGLE_PLACEAPI_NEARBYSEARCH_URI = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
 	String GOOGLE_PLACEAPI_TEXTSEARCH_URI ="https://maps.googleapis.com/maps/api/place/textsearch/json?";
 	
-	
 	HashSet<String> requiredGoogleTextSearchParams = new HashSet<>(Arrays.asList("query"));
 	HashSet<String> optionalGoogletextSearchParams = new HashSet<>(Arrays.asList("region","location","radius","language","minprice and maxprice","opennow","pagetoken","type"));
 	
+	String GOOGLE_PLACE_DETAILS_API_URI="https://maps.googleapis.com/maps/api/place/details/json?";
 }

@@ -54,7 +54,8 @@ public class GooglePlaceApiProcessor implements Callable<ConcurrentHashMap<Strin
 		List<PlaceDetail> places = new LinkedList<>();
 
 		try {
-
+			String context_path = this.parameters.get("context_path");
+			
 			// google place textsearch api url
 			StringBuffer uriBuilder = new StringBuffer(AppConstants.GOOGLE_PLACEAPI_TEXTSEARCH_URI);
 			
@@ -75,7 +76,7 @@ public class GooglePlaceApiProcessor implements Callable<ConcurrentHashMap<Strin
 
 				if("OK".equalsIgnoreCase(responseJson.getString("status"))) {
 					JSONArray results = responseJson.getJSONArray("results");
-					places =  parsePlaceDetail(results);
+					places =  parsePlaceDetail(context_path,results);
 				}
 
 				if(responseJson.has("next_page_token")) {
@@ -106,7 +107,7 @@ public class GooglePlaceApiProcessor implements Callable<ConcurrentHashMap<Strin
 	 * @return List<PlaceDetail>
 	 * @throws JSONException
 	 */
-	private List<PlaceDetail> parsePlaceDetail(JSONArray results) throws JSONException {
+	private List<PlaceDetail> parsePlaceDetail(String context_path,JSONArray results) throws JSONException {
 		List<PlaceDetail> placeDetailList =new LinkedList<>();
 
 		if( results==null || results.length() ==0) {
@@ -140,7 +141,10 @@ public class GooglePlaceApiProcessor implements Callable<ConcurrentHashMap<Strin
 			}
 
 			placeDetail.setDescription(placeDetail.getName() +", "+ placeDetail.getAddress());
-
+			
+			if(jo.has("place_id")) {
+				placeDetail.setUri(context_path+"/api/place/details/"+jo.getString("place_id"));
+			}
 
 			placeDetailList.add(placeDetail);
 		}
